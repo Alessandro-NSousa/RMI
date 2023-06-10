@@ -25,6 +25,15 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 
+//imports de criptografia
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
+
 /**
  * 
  * @author Daragh Walshe B00064428
@@ -48,12 +57,26 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 	protected JButton privateMsgButton, startButton, sendButton;
 	protected JPanel clientPanel, userPanel;
 
+	
+	private SecretKey generateSecretKey() {
+		try {
+			KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+			keyGenerator.init(128); // Altere o tamanho da chave conforme necessário
+			return keyGenerator.generateKey();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+
 	/**
 	 * Main method to start client GUI app.
 	 * 
 	 * @param args
 	 */
 	public static void main(String args[]) {
+
 		// set the look and feel to 'Nimbus'
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -183,8 +206,8 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Populate current user panel with a
-	 * selectable list of currently connected users
+	 * Preencha o painel do usuário atual com um
+* lista selecionável de usuários atualmente conectados
 	 * 
 	 * @param currClients
 	 */
@@ -199,7 +222,7 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 			privateMsgButton.setEnabled(true);
 		}
 
-		// Create the list and put it in a scroll pane.
+		// Crie a lista e coloque-a em um painel de rolagem.
 		list = new JList<String>(listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list.setVisibleRowCount(8);
@@ -211,7 +234,7 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Make the buttons and add the listener
+	 * Faça os botões e adicione o ouvinte
 	 * 
 	 * @return
 	 */
@@ -220,7 +243,7 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 		sendButton.addActionListener(this);
 		sendButton.setEnabled(false);
 
-		privateMsgButton = new JButton("Enviar PM");
+		privateMsgButton = new JButton("Enviar MP");
 		privateMsgButton.addActionListener(this);
 		privateMsgButton.setEnabled(false);
 
@@ -237,7 +260,7 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Action handling on the buttons
+	 * Manipulação de ações nos botões
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -247,7 +270,7 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 			if (e.getSource() == startButton) {
 				name = textField.getText();
 				if (name.length() != 0) {
-					frame.setTitle(name + "'s console ");
+					frame.setTitle("Console de: " + name);
 					textField.setText("");
 					textArea.append("Usuário : " + name + " conectando ao chat...\n");
 					getConnected(name);
@@ -260,7 +283,7 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 				}
 			}
 
-			// get text and clear textField
+			// obter texto e limpar textField
 			if (e.getSource() == sendButton) {
 				message = textField.getText();
 				textField.setText("");
@@ -268,12 +291,12 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 				System.out.println("Enviando mensagem : " + message);
 			}
 
-			// send a private message, to selected users
+			// enviar uma mensagem privada, para usuários selecionados
 			if (e.getSource() == privateMsgButton) {
 				int[] privateList = list.getSelectedIndices();
 
 				for (int i = 0; i < privateList.length; i++) {
-					System.out.println("selected index :" + privateList[i]);
+					System.out.println("índice selecionado :" + privateList[i]);
 				}
 				message = textField.getText();
 				textField.setText("");
@@ -289,34 +312,49 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Send a message, to be relayed to all chatters
+	 * Envie uma mensagem, para ser retransmitida a todos os participantes
 	 * 
 	 * @param chatMessage
 	 * @throws RemoteException
 	 */
 	private void sendMessage(String chatMessage) throws RemoteException {
-		chatClient.serverIF.updateChat(name, chatMessage);
+		try {
+			SecretKey secretKey = generateSecretKey();
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			byte[] encryptedMessage = cipher.doFinal(chatMessage.getBytes());
+	
+			// Converte a mensagem criptografada em uma representação de string segura para transmissão
+			String encryptedMessageStr = Base64.getEncoder().encodeToString(encryptedMessage);
+	
+			// Envie a mensagem criptografada para o servidor
+			chatClient.serverIF.updateChat(name, encryptedMessageStr);
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
 
 	/**
-	 * Send a message, to be relayed, only to selected chatters
+	 * Envie uma mensagem, para ser retransmitida, apenas para participantes selecionados
 	 * 
 	 * @param chatMessage
 	 * @throws RemoteException
 	 */
 	private void sendPrivate(int[] privateList) throws RemoteException {
-		String privateMessage = "[PM from " + name + "] :" + message + "\n";
+		String privateMessage = "[Mensagem privada de " + name + "] :" + message + "\n";
 		chatClient.serverIF.sendPM(privateList, privateMessage);
 	}
 
 	/**
-	 * Make the connection to the chat server
+	 * Faça a conexão com o servidor de chat
 	 * 
 	 * @param userName
 	 * @throws RemoteException
 	 */
 	private void getConnected(String userName) throws RemoteException {
-		// remove whitespace and non word characters to avoid malformed url
+		// remova espaços em branco e caracteres não verbais para evitar url malformado
 		String cleanedUserName = userName.replaceAll("\\s+", "_");
 		cleanedUserName = userName.replaceAll("\\W+", "_");
 		try {
@@ -327,4 +365,4 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 		}
 	}
 
-}// end class
+}

@@ -5,17 +5,15 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 
 import server.ChatServerIF;
 
-/**
- * 
- * @author Daragh Walshe 	B00064428
- * RMI Assignment 2		 	April 2015
- *
- */
+
 public class ChatClient3  extends UnicastRemoteObject implements ChatClient3IF {
 	/**
 	 * 
@@ -31,9 +29,9 @@ public class ChatClient3  extends UnicastRemoteObject implements ChatClient3IF {
 
 	
 	/**
-	 * class constructor,
-	 * note may also use an overloaded constructor with 
-	 * a port no passed in argument to super
+	 construtor de classe,
+	* note também pode usar um construtor sobrecarregado com
+	* uma porta não passada como argumento para super
 	 * @throws RemoteException
 	 */
 	public ChatClient3(ClientRMIGUI aChatGUI, String userName) throws RemoteException {
@@ -45,8 +43,8 @@ public class ChatClient3  extends UnicastRemoteObject implements ChatClient3IF {
 
 	
 	/**
-	 * Register our own listening service/interface
-	 * lookup the server RMI interface, then send our details
+	 * Registre nosso próprio serviço/interface de escuta
+* procure a interface RMI do servidor e envie nossos detalhes
 	 * @throws RemoteException
 	 */
 	public void startClient() throws RemoteException {		
@@ -70,13 +68,13 @@ public class ChatClient3  extends UnicastRemoteObject implements ChatClient3IF {
 		if(!connectionProblem){
 			registerWithServer(details);
 		}	
-		System.out.println("Client Listen RMI Server is running...\n");
+		System.out.println("O servidor RMI de escuta do cliente está em execução...\n");
 	}
 
 
 	/**
-	 * pass our username, hostname and RMI service name to
-	 * the server to register out interest in joining the chat
+	 * passar nosso nome de usuário, nome do host e nome do serviço RMI para
+	* o servidor  registrar o interesse em entrar no chat
 	 * @param details
 	 */
 	public void registerWithServer(String[] details) {		
@@ -91,21 +89,21 @@ public class ChatClient3  extends UnicastRemoteObject implements ChatClient3IF {
 
 	//=====================================================================
 	/**
-	 * Receive a string from the chat server
-	 * this is the clients RMI method, which will be used by the server 
-	 * to send messages to us
+	 * Receba uma string do servidor de chat
+	* este é o método RMI do cliente, que será usado pelo servidor
+	* para enviar mensagens para nós
 	 */
 	@Override
 	public void messageFromServer(String message) throws RemoteException {
 		System.out.println( message );
 		chatGUI.textArea.append( message );
-		//make the gui display the last appended text, ie scroll to bottom
+		//faça o gui exibir o último texto anexado, ou seja, role para baixo
 		chatGUI.textArea.setCaretPosition(chatGUI.textArea.getDocument().getLength());
 	}
 
 	/**
-	 * A method to update the display of users 
-	 * currently connected to the server
+	 * Um método para atualizar a exibição de usuários
+	* atualmente conectado ao servidor
 	 */
 	@Override
 	public void updateUserList(String[] currentUsers) throws RemoteException {
@@ -119,7 +117,7 @@ public class ChatClient3  extends UnicastRemoteObject implements ChatClient3IF {
 		chatGUI.clientPanel.revalidate();
 	}
 
-}//end class
+}
 
 
 

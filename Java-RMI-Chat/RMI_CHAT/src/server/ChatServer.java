@@ -77,8 +77,8 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
 	}
 
 	/**
-	 * Send a string ( the latest post, mostly )
-	 * to all connected clients
+	 * Envie uma string (a última postagem, principalmente)
+* para todos os clientes conectados
 	 */
 	public void updateChat(String name, String nextPost) throws RemoteException {
 		String message = name + " : " + nextPost + "\n";
@@ -86,7 +86,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
 	}
 
 	/**
-	 * Receive a new client remote reference
+	 * Receba uma nova referência remota de cliente
 	 */
 	@Override
 	public void passIDentity(RemoteRef ref) throws RemoteException {
@@ -164,7 +164,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
 	}
 
 	/**
-	 * Send a message to all users
+	 * Envie uma mensagem para todos os usuários
 	 * 
 	 * @param newMessage
 	 */

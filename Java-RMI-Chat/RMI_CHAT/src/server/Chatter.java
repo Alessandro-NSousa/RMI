@@ -4,8 +4,8 @@ import client.ChatClient3IF;
 
 
 /**
- * A class used by the server program to keep
- * details of connected clients ordered
+ * Uma classe usada pelo programa servidor para manter
+  * detalhes dos clientes conectados solicitados
  * @author Daragh Walshe 	B00064428
  * RMI Assignment 2		 	April 2015
  *

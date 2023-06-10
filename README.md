@@ -11,24 +11,16 @@ The directories included in this repo:
 * Design: UML diagrams and wireframe sketch design 
 
 ### Features:  
-- The appplication follows a hub and spoke topology, with the server as the hub.
-- Clients logon to the system with a username
-- Clients can send a normal chat message(broadcast to all clients)
-- Clients can send a private message to one or more clients  
-- Server maintains a user list, which is displayed in client GUI
-- Online user list is updated on all clients when users join or leave the chat room  
+- O aplicativo segue uma topologia de hub e spoke, com o servidor como hub.
+- Os clientes fazem login no sistema com um nome de usuário
+- Os clientes podem enviar uma mensagem de chat normal (transmitir para todos os clientes)
+- Os clientes podem enviar uma mensagem privada para um ou mais clientes
+- O servidor mantém uma lista de usuários, que é exibida na GUI do cliente
+- A lista de usuários online é atualizada em todos os clientes quando os usuários entram ou saem da sala de chat
 
 ### Instructions
-- Start the server first (main method: ChatServer.java)
-- Start a client (main method: ClientRMIGUI.java)
-- Enter a unique username to join the chat
+- Inicie o servidor primeiro (método principal: ChatServer.java)
+- Inicie um cliente (método principal: ClientRMIGUI.java)
+- Digite um nome de usuário exclusivo para entrar no chat
 
 
-<hr />
-<img src="https://github.com/daraghwalshe/Java-RMI-Chat/blob/master/Images/chat-1.PNG" width="400">
-<HR />
-<img src="https://github.com/daraghwalshe/Java-RMI-Chat/blob/master/Images/chat-2.PNG" width="400">
-<hr />
-<img src="https://github.com/daraghwalshe/Java-RMI-Chat/blob/master/Images/chat-3.PNG" width="400">
-<HR />
-<img src="https://github.com/daraghwalshe/Java-RMI-Chat/blob/master/Images/chat-4.PNG" width="400">
