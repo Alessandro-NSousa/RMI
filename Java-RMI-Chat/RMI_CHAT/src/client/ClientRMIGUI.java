@@ -34,12 +34,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 
-/**
- * 
- * @author Daragh Walshe B00064428
- *         RMI Assignment 2 April 2015
- *
- */
+// Imports da classe
 public class ClientRMIGUI extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -51,6 +46,8 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 	private ChatClient3 chatClient;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
+	private SecretKey secretKey;
+
 
 	protected JTextArea textArea, userArea;
 	protected JFrame frame;
@@ -88,12 +85,13 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 		} catch (Exception e) {
 		}
 		new ClientRMIGUI();
-	}// end main
+	}
 
 	/**
 	 * GUI Constructor
 	 */
 	public ClientRMIGUI() {
+		secretKey = generateSecretKey();
 
 		frame = new JFrame("Console de bate-papo do cliente");
 
@@ -309,17 +307,38 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 
 	}// end actionPerformed
 
-	// --------------------------------------------------------------------
-
+	//processo de descriptografar a menssagem que já foi criptografada
+	private String receiveMessage(String encryptedMessageStr) {
+		try {
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+	
+			// Converte a mensagem criptografada de volta para um array de bytes
+			byte[] encryptedMessage = Base64.getDecoder().decode(encryptedMessageStr);
+	
+			// Descriptografa a mensagem
+			byte[] decryptedMessage = cipher.doFinal(encryptedMessage);
+	
+			// Converte a mensagem descriptografada de bytes para string
+			String decryptedMessageStr = new String(decryptedMessage);
+	
+			return decryptedMessageStr;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		return null;
+	}
+	
+	
 	/**
-	 * Envie uma mensagem, para ser retransmitida a todos os participantes
+	 * Envie uma mensagem, para ser retransmitida a todos os participantes 
 	 * 
 	 * @param chatMessage
 	 * @throws RemoteException
 	 */
 	private void sendMessage(String chatMessage) throws RemoteException {
 		try {
-			SecretKey secretKey = generateSecretKey();
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 			byte[] encryptedMessage = cipher.doFinal(chatMessage.getBytes());
@@ -334,6 +353,8 @@ public class ClientRMIGUI extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 
 	/**
