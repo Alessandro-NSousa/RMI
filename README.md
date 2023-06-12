@@ -23,7 +23,7 @@ Os diretórios incluídos neste repositório:
 - Inicie um cliente (método principal: ClientRMIGUI.java)
 - Digite um nome de usuário exclusivo para entrar no chat
 
-### customization pela turma de sistemas de informação da UFPA 2019.4
+### customizado pela turma de sistemas de informação da UFPA 2019.4
 - Adionado métodos para realizar criptografia das mensagens enviadas
 
 
