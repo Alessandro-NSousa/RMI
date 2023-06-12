@@ -1,14 +1,14 @@
 # Java-RMI-Chat
-A Chat application using java remote method invocation
+Um aplicativo de bate-papo usando invocação de método remoto java
 
-### A third year college project :mortar_board: :three:  
+### Um projeto de terceiro ano da faculdade :mortar_board: :three:
 
-This is a project to build a client-server chat application using java RMI technology
-The directories included in this repo:  
-* Java-RMI-Chat: The eclipse project directory  
-	- Client: All relevant code for the client chat GUI.  
-	- Server: The code for the central server.  
-* Design: UML diagrams and wireframe sketch design 
+Este é um projeto para construir um aplicativo de bate-papo cliente-servidor usando a tecnologia java RMI
+Os diretórios incluídos neste repositório:
+* Java-RMI-Chat: O diretório do projeto eclipse
+- Cliente: Todo o código relevante para a GUI de bate-papo do cliente.
+- Servidor: O código para o servidor central.
+* Design: diagramas UML e design de esboço de wireframe
 
 ### Features:  
 - O aplicativo segue uma topologia de hub e spoke, com o servidor como hub.
@@ -18,9 +18,13 @@ The directories included in this repo:
 - O servidor mantém uma lista de usuários, que é exibida na GUI do cliente
 - A lista de usuários online é atualizada em todos os clientes quando os usuários entram ou saem da sala de chat
 
-### Instructions
+### Instructionsll
 - Inicie o servidor primeiro (método principal: ChatServer.java)
 - Inicie um cliente (método principal: ClientRMIGUI.java)
 - Digite um nome de usuário exclusivo para entrar no chat
+
+### customization pela turma de sistemas de informação da UFPA 2019.4
+- Adionado métodos para realizar criptografia das mensagens enviadas
+
 
 

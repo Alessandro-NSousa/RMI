@@ -90,17 +90,17 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
 	 */
 	@Override
 	public void passIDentity(RemoteRef ref) throws RemoteException {
-		// System.out.println("\n" + ref.remoteToString() + "\n");
+		System.out.println("\n" + ref.remoteToString() + "\n");
 		try {
 			System.out.println(line + ref.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}// end passIDentity
+	}
 
 	/**
-	 * Receive a new client and display details to the console
-	 * send on to register method
+	 * Receba um novo cliente e exiba detalhes no console
+	 * enviar para o método de registro
 	 */
 	@Override
 	public void registerListener(String[] details) throws RemoteException {
@@ -111,11 +111,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
 		registerChatter(details);
 	}
 
-	/**
-	 * register the clients interface and store it in a reference for
-	 * future messages to be sent to, ie other members messages of the chat session.
-	 * send a test message for confirmation / test connection
-	 * 
+	/** 
 	 * @param details
 	 */
 	private void registerChatter(String[] details) {
@@ -211,4 +207,4 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
 		}
 	}
 
-}// END CLASS
+}
